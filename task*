@@ -1,0 +1,13 @@
+#CONFIG 
+src/config/db.ts                 تنظیمات دیتابی انجام شد و نتایج تست شد
+src/config/index.ts              تنظیمات ایندکس انجام شد و نتایج تست شد 
+src/config/env.ts                تنظیمات env انجام شد و نتایج تست شد
+src/config/di.container.ts       {}
+
+#utils
+src/core/utils/cache.ts          تنظیمات کش انجام شد و نتایج تست شد
+src/core/utils/logger.ts         تنظیمات لاگ انجام شد و نتایج تست شد
+src/core/utils/queue.ts          تنظیمات صف انجام شد و نتایج تست شد
+src/core/utils/index.ts          تنظیمات ایندکس انجام شد و نتایج تست شد
+
+
