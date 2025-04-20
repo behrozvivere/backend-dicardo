@@ -10,4 +10,61 @@ src/core/utils/logger.ts         تنظیمات لاگ انجام شد و نتا
 src/core/utils/queue.ts          تنظیمات صف انجام شد و نتایج تست شد
 src/core/utils/index.ts          تنظیمات ایندکس انجام شد و نتایج تست شد
 
+#modules/products/external
+external/product.api.ts          تمام فرایند دریافت از api  انجام شد و تست شد
+external/product.mapper.ts       مپ کردن محتوا و افزودن تصویر به درستی انجام شد
+external/product.ripository      []
+
+
+
+#src/types
+src/types/models                 تنظیمات تایپ مدل های ابتدایی دیتابیس انجام شده و تست و برسی شده
+
+
+
+
+
+
+#types
+#  تایپ کشور ها
+/ id :                    // شناسه کشور
+/ name:                   // نام کشور به زبان انگلیسی  
+/ visible:                // وضعیت نمایش (0 یا 1)
+/ retry:                  // قابلیت درخواست مجدد (0 یا 1)
+/ rent:                   // قابلیت اجاره (0 یا 1)
+/ multiService:           // پشتیبانی از چند سرویس (0 یا 1)  
+/ image                   // آدرس تصویر پرچم کشور    
+
+
+#  تایپ سرویس ها 
+/ code:                   // کد سرویس
+/ name:                   // نام سرویس
+/ image:                  // آدرس تصویر سرویس
+
+
+# تایپ کشور و سرویس
+/CODE_SERVICE:           // کد سرویس
+/ COUNTRY_ID:            // شناسه کشور
+/ count:                // تعداد شماره‌های موجود  
+/ price:                // قیمت (به واحد ارز API)  
+/ retail_price:         // قیمت خرده‌فروشی   
+
+# تایپ فعالسازی
+/ CODE_SERVICE:           // کد سرویس
+/ COUNTRY_ID:            // شناسه کشور
+/ OPERATOR:              // اپراتور
+/ PHONE_NUMBER:          // شماره تلفن
+/ ACTIVATION_ID:         // شناسه فعالسازی
+/ ACTIVATION_COST:       // هزینه فعالسازی
+/ ACTIVATION_TIME:       // زمان فعالسازی
+/ canGetAnotherSms :     //true /FALSE آیا می‌توان پیامک دیگری دریافت کرد؟
+/ activationEndTime:     // زمان پایان فعالسازی
+/ SMS :                  // پیام دریافتی
+/ STATUS:               // وضعیت فعالسازی
+/ ORDER_ID:              // شناسه سفارش
+
+
+
+
+
 

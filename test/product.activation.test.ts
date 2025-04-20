@@ -30,7 +30,7 @@ async function testFullActivationProcess() {
     // Request parameters
     const params: GetNumberV2Params = {
       service: 'wa',       // WhatsApp service
-      country: 6,          // Indonesia country code
+      country: 4,          // Indonesia country code
       orderId: orderId,    // Unique order ID
     };
     
