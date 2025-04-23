@@ -15,6 +15,14 @@ export const smsActivateConfig = {
 };
 
 /**
+ * Navasan API تنظیمات مربوط به سرویس
+ */
+export const navasanConfig = {
+  apiUrl: process.env.NAVASAN_API_URL || 'https://api.navasan.tech/latest/',
+  apiToken: process.env.NAVASAN_API_TOKEN || '',
+};
+
+/**
  * Supabase تنظیمات مربوط به
  */
 export const supabaseConfig = {
@@ -36,6 +44,7 @@ export const serverConfig = {
  */
 export const env = {
   smsActivate: smsActivateConfig,
+  navasan: navasanConfig,
   supabase: supabaseConfig,
   server: serverConfig,
 };

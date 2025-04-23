@@ -30,6 +30,8 @@ import {
   UpdateActivationStatusParams
 } from '../../../types';
 
+import { defaultPricingService, PricingService } from '../services/pricing.service';
+
 /**
  * کلاس اصلی mapper برای تبدیل داده‌های خام API به مدل‌های دیتابیس
  */
@@ -44,6 +46,34 @@ export class ProductMapper {
    * مسیر پایه برای تصاویر سرویس‌ها
    */
   private static readonly SERVICES_BASE_PATH = '/public/brand/';
+
+  /**
+   * سرویس قیمت‌گذاری برای تبدیل قیمت دلار به تومان
+   */
+  private static pricingService: PricingService = defaultPricingService;
+
+  /**
+   * تنظیم سرویس قیمت‌گذاری برای استفاده در مپر
+   * @param pricingService سرویس قیمت‌گذاری جدید
+   */
+  public static setPricingService(pricingService: PricingService): void {
+    this.pricingService = pricingService;
+  }
+
+  /**
+   * محاسبه قیمت از دلار به تومان با استفاده از سرویس قیمت‌گذاری
+   * @param usdPrice قیمت به دلار
+   * @returns قیمت به تومان
+   */
+  private static async calculateIRTPrice(usdPrice: number): Promise<number> {
+    try {
+      const irtPrice = await this.pricingService.calculatePriceWithProfit(usdPrice);
+      return Math.round(irtPrice); // گرد کردن به عدد صحیح
+    } catch (error) {
+      console.error('خطا در محاسبه قیمت تومانی:', error);
+      return 0; // در صورت خطا، مقدار صفر برگردانده می‌شود
+    }
+  }
 
   /**
    * تبدیل داده خام کشور به مدل کشور
@@ -110,13 +140,16 @@ export class ProductMapper {
    * @param serviceCode کد سرویس
    * @returns مدل ارتباط کشور و سرویس قابل استفاده در دیتابیس
    */
-  public static mapCountryService(rawTopCountryData: RawTopCountryData, serviceCode: string): CountryService {
+  public static async mapCountryService(rawTopCountryData: RawTopCountryData, serviceCode: string): Promise<CountryService> {
+    const priceIRT = await this.calculateIRTPrice(rawTopCountryData.price);
+    
     return {
       serviceCode,
       countryId: rawTopCountryData.country,
       count: rawTopCountryData.count,
       price: rawTopCountryData.price,
-      retailPrice: rawTopCountryData.retail_price
+      retailPrice: rawTopCountryData.retail_price,
+      priceIRT // قیمت به تومان
     };
   }
 
@@ -125,12 +158,13 @@ export class ProductMapper {
    * @param rawTopCountriesResponse پاسخ خام کشورهای برتر دریافتی از API
    * @returns لیست مدل ارتباط کشور و سرویس قابل استفاده در دیتابیس
    */
-  public static mapCountryServiceList(rawTopCountriesResponse: RawTopCountriesResponse): CountryServiceList {
+  public static async mapCountryServiceList(rawTopCountriesResponse: RawTopCountriesResponse): Promise<CountryServiceList> {
     const result: CountryServiceList = [];
     
-    Object.entries(rawTopCountriesResponse).forEach(([serviceCode, topCountryData]) => {
-      result.push(this.mapCountryService(topCountryData, serviceCode));
-    });
+    for (const [serviceCode, topCountryData] of Object.entries(rawTopCountriesResponse)) {
+      const countryService = await this.mapCountryService(topCountryData, serviceCode);
+      result.push(countryService);
+    }
     
     return result;
   }
@@ -141,10 +175,12 @@ export class ProductMapper {
    * @param params پارامترهای درخواست فعال‌سازی
    * @returns مدل فعال‌سازی قابل استفاده در دیتابیس
    */
-  public static mapActivation(
+  public static async mapActivation(
     rawActivationResponse: RawGetNumberV2Response, 
     params: CreateActivationParams
-  ): Activation {
+  ): Promise<Activation> {
+    const priceIRT = await this.calculateIRTPrice(rawActivationResponse.activationCost);
+    
     return {
       serviceCode: params.serviceCode,
       countryId: params.countryId,
@@ -155,7 +191,8 @@ export class ProductMapper {
       activationTime: rawActivationResponse.activationTime,
       canGetAnotherSms: rawActivationResponse.canGetAnotherSms === '1',
       status: ActivationStatus.WAITING_CODE,
-      orderId: params.orderId
+      orderId: params.orderId,
+      priceIRT // قیمت به تومان
     };
   }
 
@@ -205,4 +242,3 @@ export class ProductMapper {
 }
 
 // صادر کردن یک نمونه پیش‌فرض برای استفاده سریع
-export default ProductMapper;

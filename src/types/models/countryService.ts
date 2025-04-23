@@ -11,6 +11,7 @@ export interface CountryService {
   count: number;          // تعداد شماره‌های موجود
   price: number;          // قیمت (به واحد ارز API)
   retailPrice: number;    // قیمت خرده‌فروشی
+  priceIRT?: number;      // قیمت به تومان
 }
 
 /**

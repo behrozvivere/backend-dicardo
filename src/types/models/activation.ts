@@ -28,6 +28,7 @@ export interface Activation {
   sms?: string;                // پیام دریافتی
   status: ActivationStatus;    // وضعیت فعالسازی
   orderId?: string;            // شناسه سفارش
+  priceIRT?: number;           // قیمت به تومان
 }
 
 /**
